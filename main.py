@@ -7,7 +7,7 @@ from models import Base, Card
 import os
 
 # Database setup
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:password@localhost/cards_db")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://cards_db_ka8q_user:oJ8c77zdqnrsrgAPT7TlQSoqTAvXLiBt@dpg-d0a58kjuibrs73augn2g-a/cards_db_ka8q")
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
