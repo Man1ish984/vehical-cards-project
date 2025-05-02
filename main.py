@@ -1,8 +1,16 @@
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from database import SessionLocal, engine
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 from models import Base, Card
+import os
+
+# Database setup
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:password@localhost/cards_db")
+
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base.metadata.create_all(bind=engine)
 
@@ -53,7 +61,23 @@ def create_card(card: CardCreate):
     db.refresh(db_card)
     return db_card
 
+# Route to add sample cards (for testing purposes)
+@app.post("/admin/add-sample-cards")
+def add_sample_cards():
+    db = SessionLocal()
+    sample_data = [
+        {"title": "Electric Beast", "category": "Electric Bike"},
+        {"title": "Cycle King", "category": "E-Cycles"},
+        {"title": "Zoom 3000", "category": "High-Speed Scooter"},
+        {"title": "Eco Comfy", "category": "Low-Speed Scooter"},
+    ]
+    for item in sample_data:
+        card = Card(title=item["title"], category=item["category"])
+        db.add(card)
+    db.commit()
+    return {"message": "Sample cards added!"}
 
+# Route to check if the API is running
 @app.get("/")
 def root():
     return {"message": "Vehicle Cards API is running!"}
