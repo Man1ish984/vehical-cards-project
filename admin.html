@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel - Vehicle Cards</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Roboto", sans-serif;
+        background: #f3f4f6;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 480px;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      h2 {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+
+      input,
+      select,
+      button {
+        padding: 12px;
+        margin: 10px 0;
+        font-size: 16px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+      }
+
+      input,
+      select {
+        width: 100%;
+        background-color: #fafafa;
+      }
+
+      button {
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      .response {
+        font-size: 16px;
+        font-weight: 500;
+        margin-top: 20px;
+      }
+
+      .response.success {
+        color: green;
+      }
+
+      .response.error {
+        color: red;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 600px) {
+        .container {
+          padding: 20px;
+          width: 100%;
+        }
+
+        h2 {
+          font-size: 22px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Add New Card</h2>
+      <form id="cardForm">
+        <input type="text" id="title" placeholder="Enter card title" required />
+        <select id="category" required>
+          <option value="Electric Bike">Electric Bike</option>
+          <option value="E-Cycles">E-Cycles</option>
+          <option value="High-Speed Scooter">High-Speed Scooter</option>
+          <option value="Low-Speed Scooter">Low-Speed Scooter</option>
+        </select>
+        <button type="submit">Create Card</button>
+      </form>
+
+      <div class="response" id="response"></div>
+    </div>
+
+    <script>
+      document
+        .getElementById("cardForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const title = document.getElementById("title").value;
+          const category = document.getElementById("category").value;
+
+          const response = await fetch("http://127.0.0.1:8000/admin/cards", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title, category }),
+          });
+
+          const result = await response.json();
+
+          const responseElement = document.getElementById("response");
+          if (result.title) {
+            responseElement.textContent = `✅ Card created: ${result.title}`;
+            responseElement.classList.add("success");
+            responseElement.classList.remove("error");
+          } else {
+            responseElement.textContent = "❌ Error creating card.";
+            responseElement.classList.add("error");
+            responseElement.classList.remove("success");
+          }
+        });
+    </script>
+  </body>
+</html>
