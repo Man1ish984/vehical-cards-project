@@ -66,11 +66,13 @@
     <div class="cards-container" id="cards-container"></div>
 
     <script>
+      const baseURL = "https://vehical-cards-api.onrender.com";
+
       const categoryImages = {
-        "Electric Bike": "https://picsum.photos/250/160?random=1", // Random image for Electric Bike
-        "E-Cycles": "https://picsum.photos/250/160?random=2", // Random image for E-Cycles
-        "High-Speed Scooter": "https://picsum.photos/250/160?random=3", // Random image for High-Speed Scooter
-        "Low-Speed Scooter": "https://picsum.photos/250/160?random=4", // Random image for Low-Speed Scooter
+        "Electric Bike": "https://picsum.photos/250/160?random=1",
+        "E-Cycles": "https://picsum.photos/250/160?random=2",
+        "High-Speed Scooter": "https://picsum.photos/250/160?random=3",
+        "Low-Speed Scooter": "https://picsum.photos/250/160?random=4",
       };
 
       let currentCategory = "";
@@ -82,7 +84,7 @@
 
       async function loadCards(category) {
         const response = await fetch(
-          `http://127.0.0.1:8000/cards?category=${encodeURIComponent(category)}`
+          `${baseURL}/cards?category=${encodeURIComponent(category)}`
         );
         const cards = await response.json();
         const container = document.getElementById("cards-container");
@@ -107,7 +109,7 @@
       }
 
       async function clickCard(cardId) {
-        await fetch(`http://127.0.0.1:8000/cards/${cardId}/click`, {
+        await fetch(`${baseURL}/cards/${cardId}/click`, {
           method: "POST",
         });
         loadCards(currentCategory);
