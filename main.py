@@ -53,7 +53,7 @@ def create_card(card: CardCreate):
     db.refresh(db_card)
     return db_card
 
-# ✅ Root route to check if API is alive
+
 @app.get("/")
 def root():
     return {"message": "Vehicle Cards API is running!"}
